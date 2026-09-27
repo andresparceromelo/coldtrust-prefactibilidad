@@ -249,7 +249,84 @@
             border: 2px solid var(--primary);
             font-weight: bold;
         }
+
+        /* --- Novedades UIX PRO --- */
+        
+        /* 6. Fondos Sutiles Animados */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        #presentation-container {
+            background: linear-gradient(-45deg, var(--bg-color), #e9ecef, #f1f3f5, #e0e6ed);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        .portada, .cierre {
+            background: linear-gradient(-45deg, #111, #1a2f26, var(--primary), #053b2a) !important;
+            background-size: 400% 400% !important;
+            animation: gradientBG 15s ease infinite !important;
+        }
+
+        /* 1. Transiciones Cinematográficas */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .slide.active > * {
+            opacity: 0;
+            animation: fadeInUp 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        .slide.active h1, .slide.active .slide-header { animation-delay: 0.1s; }
+        .slide.active .content-split > .text-col, .slide.active .tagline { animation-delay: 0.3s; }
+        .slide.active .content-split > .graphic-col, .slide.active .team { animation-delay: 0.5s; }
+        
+        /* 2. Barra de Progreso */
+        .progress-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(0,0,0,0.05);
+            z-index: 20;
+        }
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        /* 3. Hover Effects y Glassmorphism */
+        .matrix-box {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .matrix-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+        .glass-panel:hover {
+            transform: translateY(-3px);
+        }
+        .roadmap-item { transition: transform 0.3s; }
+        .roadmap-item:hover { transform: scale(1.05); }
     </style>
+
 </head>
 <body>
 
@@ -460,31 +537,31 @@
             <h2 class="slide-header">Roadmap de Ejecución</h2>
             <div style="display: flex; justify-content: space-between; align-items: center; height: 350px; margin-top: 50px;">
                 
-                <div style="text-align: center; flex: 1;">
+                <div style="text-align: center; flex: 1;" class="roadmap-item">
                     <div style="width:60px; height:60px; background:var(--primary); color:white; border-radius:50%; display:flex; justify-content:center; align-items:center; margin: 0 auto 15px; font-weight:bold; font-size:1.5rem;">0</div>
                     <strong>Año 0</strong><br><span style="color:#666;">Inversión &<br>Certificación</span>
                 </div>
                 <div style="height:2px; background:var(--primary); flex:1;"></div>
                 
-                <div style="text-align: center; flex: 1;">
+                <div style="text-align: center; flex: 1;" class="roadmap-item">
                     <div style="width:60px; height:60px; background:var(--primary); color:white; border-radius:50%; display:flex; justify-content:center; align-items:center; margin: 0 auto 15px; font-weight:bold; font-size:1.5rem;">1</div>
                     <strong>Año 1</strong><br><span style="color:#666;">Piloto &<br>50 Viajes/mes</span>
                 </div>
                 <div style="height:2px; background:var(--primary); flex:1;"></div>
 
-                <div style="text-align: center; flex: 1;">
+                <div style="text-align: center; flex: 1;" class="roadmap-item">
                     <div style="width:60px; height:60px; background:var(--primary); color:white; border-radius:50%; display:flex; justify-content:center; align-items:center; margin: 0 auto 15px; font-weight:bold; font-size:1.5rem;">2</div>
                     <strong>Año 2</strong><br><span style="color:#666;">Convenios<br>InsurTech</span>
                 </div>
                 <div style="height:2px; background:var(--primary); flex:1;"></div>
 
-                <div style="text-align: center; flex: 1;">
+                <div style="text-align: center; flex: 1;" class="roadmap-item">
                     <div style="width:60px; height:60px; background:var(--primary); color:white; border-radius:50%; display:flex; justify-content:center; align-items:center; margin: 0 auto 15px; font-weight:bold; font-size:1.5rem;">3</div>
                     <strong>Año 3</strong><br><span style="color:#666;">Expansión a<br>20 Kits</span>
                 </div>
                 <div style="height:2px; background:var(--primary); flex:1;"></div>
 
-                <div style="text-align: center; flex: 1;">
+                <div style="text-align: center; flex: 1;" class="roadmap-item">
                     <div style="width:60px; height:60px; background:var(--primary); color:white; border-radius:50%; display:flex; justify-content:center; align-items:center; margin: 0 auto 15px; font-weight:bold; font-size:1.5rem;">4</div>
                     <strong>Año 4</strong><br><span style="color:#666; font-weight:bold; color:var(--primary)">EBITDA+</span>
                 </div>
@@ -497,7 +574,7 @@
             <h2>"No vendemos sensores. Vendemos certeza."</h2>
             <div style="font-size: 1.5rem; margin-bottom: 40px;">Al exportador, al asegurador y al comprador.</div>
             
-            <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 10px; max-width: 800px; margin: 0 auto;">
+            <div class="glass-panel">
                 <h3 style="margin-top: 0; color: #fff;">Recomendación del Comité:</h3>
                 <p>Avanzar a fase de piloto <strong>estrictamente condicionado</strong> a validar:<br>
                 1. Disposición de pago real (clientes ancla).<br>
@@ -511,13 +588,16 @@
             </div>
         </div>
 
+        
         <!-- UI Controles de Navegación -->
+        <div class="progress-container"><div id="progress-bar"></div></div>
         <div class="slide-counter"><span id="currentSlideNum">1</span> / 12</div>
         <div class="nav-controls">
+            <button class="nav-btn" onclick="toggleFullScreen()" title="Pantalla Completa">⛶</button>
             <button class="nav-btn" onclick="prevSlide()">❮</button>
             <button class="nav-btn" onclick="nextSlide()">❯</button>
         </div>
-    </div>
+\    </div>
 
     <!-- Script de lógica e inicialización de Chart.js -->
     <script>
@@ -533,16 +613,128 @@
         }
         window.addEventListener('resize', resizePresentation);
         resizePresentation();
+        setTimeout(() => showSlide(1), 100);
 
         // Navegación de slides
         let currentSlide = 1;
         const totalSlides = 12;
 
+        
+        // Fullscreen API
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error al iniciar pantalla completa: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Progreso
+        function updateProgress(n) {
+            const percent = ((n - 1) / (totalSlides - 1)) * 100;
+            document.getElementById('progress-bar').style.width = percent + '%';
+        }
+
+        // Variable global de graficos para destruirlos y animarlos
+        let charts = {};
+
+        function renderChartsForSlide(n) {
+            // Destruir graficos si existen
+            Object.keys(charts).forEach(key => {
+                if(charts[key]) charts[key].destroy();
+            });
+
+            if (n === 3) {
+                charts['mercado'] = new Chart(document.getElementById('chart-mercado'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['TAM (Total)', 'SAM (Rechazos)', 'SOM (Nosotros)'],
+                        datasets: [{
+                            label: 'Contenedores / Año',
+                            data: [3460, 2080, 600],
+                            backgroundColor: [secondaryGray, '#8cb3a6', brandGreen]
+                        }]
+                    },
+                    options: { responsive: true, plugins: { legend: { display: false } }, animation: { duration: 1500 } }
+                });
+            } else if (n === 7) {
+                charts['rampa'] = new Chart(document.getElementById('chart-rampa'), {
+                    type: 'line',
+                    data: {
+                        labels: ['Año 1', 'Año 2', 'Año 3', 'Año 4', 'Año 5'],
+                        datasets: [{
+                            label: 'Viajes/Año',
+                            data: [600, 690, 794, 913, 1050],
+                            borderColor: brandGreen,
+                            backgroundColor: 'rgba(14, 124, 90, 0.2)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Punto Equilibrio (SaaS)',
+                            data: [1764, 1764, 1764, 1764, 1764],
+                            borderColor: alertRed,
+                            borderDash: [5, 5],
+                            borderWidth: 2,
+                            fill: false,
+                            pointRadius: 0
+                        }]
+                    },
+                    options: { responsive: true, animation: { duration: 1500 } }
+                });
+            } else if (n === 8) {
+                charts['inversion'] = new Chart(document.getElementById('chart-inversion'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Deuda Bancaria (60%)', 'Aporte Socios (40%)'],
+                        datasets: [{
+                            data: [139, 91.75],
+                            backgroundColor: [brandGreen, '#c2dcd2'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: { responsive: true, cutout: '70%', animation: { animateScale: true, animateRotate: true, duration: 1500 } }
+                });
+            } else if (n === 9) {
+                charts['er'] = new Chart(document.getElementById('chart-er'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Año 1', 'Año 2', 'Año 3', 'Año 4', 'Año 5'],
+                        datasets: [
+                            {
+                                label: 'Ingresos Totales (M COP)',
+                                data: [336, 544, 745, 981, 1256],
+                                backgroundColor: '#8cb3a6',
+                                order: 2
+                            },
+                            {
+                                type: 'line',
+                                label: 'EBITDA (M COP)',
+                                data: [-390, -229, -97, 82, 299],
+                                borderColor: brandGreen,
+                                borderWidth: 3,
+                                pointBackgroundColor: brandGreen,
+                                pointRadius: 5,
+                                order: 1
+                            }
+                        ]
+                    },
+                    options: { responsive: true, animation: { duration: 1500 }, scales: { y: { grid: { color: '#e0e0e0' } } } }
+                });
+            }
+        }
+
         function showSlide(n) {
             document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
             document.getElementById('slide' + n).classList.add('active');
             document.getElementById('currentSlideNum').innerText = n;
+            updateProgress(n);
+            renderChartsForSlide(n);
         }
+
 
         function nextSlide() {
             if(currentSlide < totalSlides) {
@@ -574,92 +766,7 @@
         const secondaryGray = '#a5a5a5';
         const alertRed = '#d9534f';
 
-        // Gráfico Mercado (Slide 3)
-        new Chart(document.getElementById('chart-mercado'), {
-            type: 'bar',
-            data: {
-                labels: ['TAM (Total)', 'SAM (Rechazos)', 'SOM (Nosotros)'],
-                datasets: [{
-                    label: 'Contenedores / Año',
-                    data: [3460, 2080, 600],
-                    backgroundColor: [secondaryGray, '#8cb3a6', brandGreen]
-                }]
-            },
-            options: { responsive: true, plugins: { legend: { display: false } } }
-        });
-
-        // Gráfico Rampa (Slide 7)
-        new Chart(document.getElementById('chart-rampa'), {
-            type: 'line',
-            data: {
-                labels: ['Año 1', 'Año 2', 'Año 3', 'Año 4', 'Año 5'],
-                datasets: [{
-                    label: 'Viajes/Año',
-                    data: [600, 690, 794, 913, 1050],
-                    borderColor: brandGreen,
-                    backgroundColor: 'rgba(14, 124, 90, 0.2)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.3
-                },
-                {
-                    label: 'Punto Equilibrio (SaaS)',
-                    data: [1764, 1764, 1764, 1764, 1764], // 147 * 12 meses
-                    borderColor: alertRed,
-                    borderDash: [5, 5],
-                    borderWidth: 2,
-                    fill: false,
-                    pointRadius: 0
-                }]
-            },
-            options: { responsive: true }
-        });
-
-        // Gráfico Inversión (Slide 8)
-        new Chart(document.getElementById('chart-inversion'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Deuda Bancaria (60%)', 'Aporte Socios (40%)'],
-                datasets: [{
-                    data: [139, 91.75],
-                    backgroundColor: [brandGreen, '#c2dcd2'],
-                    borderWidth: 0
-                }]
-            },
-            options: { responsive: true, cutout: '70%' }
-        });
-
-        // Gráfico Estado de Resultados (Slide 9) - Datos reales del Excel
-        new Chart(document.getElementById('chart-er'), {
-            type: 'bar',
-            data: {
-                labels: ['Año 1', 'Año 2', 'Año 3', 'Año 4', 'Año 5'],
-                datasets: [
-                    {
-                        label: 'Ingresos Totales (M COP)',
-                        data: [336, 544, 745, 981, 1256],
-                        backgroundColor: '#8cb3a6',
-                        order: 2
-                    },
-                    {
-                        type: 'line',
-                        label: 'EBITDA (M COP)',
-                        data: [-390, -229, -97, 82, 299],
-                        borderColor: brandGreen,
-                        borderWidth: 3,
-                        pointBackgroundColor: brandGreen,
-                        pointRadius: 5,
-                        order: 1
-                    }
-                ]
-            },
-            options: { 
-                responsive: true,
-                scales: {
-                    y: { grid: { color: '#e0e0e0' } }
-                }
-            }
-        });
+        
     </script>
 </body>
 </html>
