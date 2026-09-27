@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ColdTrust Colombia - Entregable I</title>
+    <!-- Carga de Chart.js para los gráficos interactivos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Tipografía Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #0E7C5A; /* Verde frío solicitado */
+            --bg-color: #f8f9fa; /* Fondo sobrio e inversionista */
+            --text-main: #2b2b2b;
+            --text-hero: #0E7C5A;
+            --slide-width: 1280px; /* Proporción 16:9 */
+            --slide-height: 720px;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+            color: var(--text-main);
+        }
+
+        /* Contenedor principal de la presentación */
+        #presentation-container {
+            width: var(--slide-width);
+            height: var(--slide-height);
+            background-color: var(--bg-color);
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+            transform-origin: center center;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            padding: 50px 80px;
+            box-sizing: border-box;
+            background-color: var(--bg-color);
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Headers y tipografías */
+        h1, h2 {
+            margin-top: 0;
+            font-weight: 700;
+        }
+
+        .slide-header {
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            color: var(--text-main);
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-data {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--text-hero);
+            margin: 20px 0;
+            text-align: center;
+            background: rgba(14, 124, 90, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        /* Layout general */
+        .content-split {
+            display: flex;
+            height: 100%;
+            gap: 40px;
+        }
+
+        .text-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-size: 1.4rem;
+            line-height: 1.6;
+        }
+
+        .graphic-col {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Listas con checkmark primary */
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        ul li {
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        ul li::before {
+            content: "■";
+            color: var(--primary);
+            font-size: 1.2rem;
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+
+        /* Diapositiva Portada */
+        .portada {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #111, #1a2f26);
+            color: white;
+        }
+        .portada h1 {
+            font-size: 4.5rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        .portada .tagline {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+        .portada .team {
+            font-size: 1.2rem;
+            color: #aaa;
+            margin-top: 50px;
+        }
+
+        /* Cierre */
+        .cierre {
+            background: var(--primary);
+            color: white;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .cierre h2 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            border: none;
+        }
+
+        /* Navegación */
+        .nav-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .nav-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.2s;
+        }
+        .nav-btn:hover { background: #0b6146; }
+        
+        .slide-counter {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #888;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        /* Grillas e Imágenes */
+        .img-placeholder {
+            width: 100%;
+            height: 350px;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #777;
+            font-style: italic;
+            border: 2px dashed #bbb;
+        }
+        
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+            height: 350px;
+        }
+        
+        .matrix-box {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .matrix-box.us {
+            background: rgba(14, 124, 90, 0.15);
+            border: 2px solid var(--primary);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="presentation-container">
+        <!-- Slide 1: Portada -->
+        <div class="slide portada active" id="slide1">
+            <h1>ColdTrust Colombia S.A.S.</h1>
+            <div class="tagline">"Aseguramos la cadena de frío del agro exportable"</div>
+            <div class="team">
+                Prefactibilidad — Entregable I<br><br>
+                Andrés Bedoya Cano | Tomas Henao Metaute | Luis Carlos Guerra
+            </div>
+        </div>
+
+        <!-- Slide 2: El problema -->
+        <div class="slide" id="slide2">
+            <h2 class="slide-header">El Problema: La Caja Negra del Reefer</h2>
+            <div class="content-split">
+                <div class="text-col">
+                    <ul>
+                        <li>Fruta llega fuera de especificación a puerto.</li>
+                        <li>Exportador y comprador entran en disputa comercial.</li>
+                        <li><strong>No existe evidencia técnica</strong> con validez legal del tránsito terrestre.</li>
+                        <li>Cobrar pólizas de seguro es un trámite ciego y burocrático.</li>
+                    </ul>
+                </div>
+                <div class="graphic-col">
+                    <div style="width: 100%;">
+                        <div style="font-size: 1.2rem; text-align: center; color: #555;">Tiempo de cobro de seguros:</div>
+                        <div class="hero-data">45-60 días → &lt;5 días</div>
+                        <img src="imagenes/slide2.jpg" alt="Contenedor Reefer y Aguacate Hass sobremaduro" style="width: 100%; height: 260px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Mercado -->
+        <div class="slide" id="slide3">
+            <h2 class="slide-header">Mercado: Espacio para Crecer</h2>
+            <div class="content-split">
+                <div class="text-col">
+                    <ul>
+                        <li><strong>Foco inicial:</strong> Aguacate Hass y fruver (Urabá/Antioquia, Eje Cafetero, Bogotá).</li>
+                        <li><strong>Destinos:</strong> Cartagena, Santa Marta, Buenaventura.</li>
+                        <li>Exportación de Hass crece sostenidamente al <strong>15% anual histórico</strong>.</li>
+                        <li>Nuestra proyección inicia capturando apenas el <strong>5% del TAM</strong>.</li>
+                        <li>No requerimos supuestos heroicos de participación para ser rentables.</li>
+                    </ul>
+                </div>
+                <div class="graphic-col">
+                    <canvas id="chart-mercado"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Competencia -->
+        <div class="slide" id="slide4">
+            <h2 class="slide-header">Competencia: Nuestra Esquina del Mercado</h2>
+            <div class="content-split">
+                <div class="text-col">
+                    <ul>
+                        <li><strong>Sensitech/Emerson:</strong> Alto costo (CAPEX), diseñados para marítimo, sin validez local.</li>
+                        <li><strong>Sensores genéricos (IoT):</strong> Baratos, pero no entienden la biología del agro.</li>
+                        <li><strong>Operadores Logísticos (TCC):</strong> Conflicto de interés al auto-certificarse.</li>
+                        <li><strong>Nuestra esquina:</strong> Comodato ($0 CAPEX) + Validez Legal ONAC en Colombia.</li>
+                    </ul>
+                </div>
+                <div class="graphic-col">
+                    <div class="matrix-grid">
+                        <div class="matrix-box">Alta Validez Legal<br><span style="color:#888; font-size:0.9rem">(Pero sin software/datos en vivo)</span><br><strong>Operadores Tradicionales</strong></div>
+                        <div class="matrix-box us">Alta Validez + Datos 24/7<br><strong>ColdTrust (Nosotros)</strong></div>
+                        <div class="matrix-box">Sin Validez Legal<br><span style="color:#888; font-size:0.9rem">(Sensores baratos)</span><br><strong>Startups IoT Genéricas</strong></div>
+                        <div class="matrix-box">Software y Datos<br><span style="color:#888; font-size:0.9rem">(Alto CAPEX / Globales)</span><br><strong>Sensitech / Emerson</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: La Solución -->
+        <div class="slide" id="slide5">
+            <h2 class="slide-header">La Solución: Triple Línea de Ingreso</h2>
+            <div class="content-split">
+                <div class="text-col">
+                    <ul>
+                        <li><strong>HaaS (Hardware as a Service):</strong> Comodato a $400.000 COP por viaje.</li>
+                        <li><strong>SaaS (Software as a Service):</strong> Dashboard 24/7 a $2.000.000 COP/mes por cliente.</li>
+                        <li><strong>InsurTech (Datos de Riesgo):</strong> 8% sobre primas por certificar el riesgo en vivo.</li>
+                    </ul>
+                    <div style="margin-top: 30px; padding: 15px; border-left: 5px solid var(--primary); background: #eee;">
+                        <strong>Diferencial:</strong> $0 CAPEX para el cliente. La inversión se recupera salvando el primer contenedor.
+                    </div>
+                </div>
+                <div class="graphic-col">
+                    <img src="imagenes/slide5.jpg" alt="Render del Kit Multiparamétrico IP67" style="width: 100%; height: 350px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Cómo Funciona -->
+        <div class="slide" id="slide6">
+            <h2 class="slide-header">Cómo Funciona: Arquitectura en 3 Capas</h2>
+            <div class="content-split">
+                <div class="text-col">
+                    <ul>
+                        <li><strong>El Kit (IoT):</strong> Carcasa IP67. Mide Temp, Humedad, Etileno e Impactos. Gateway 4G.</li>
+                        <li><strong>La Nube (AWS):</strong> Procesamiento en São Paulo, tablero en tiempo real.</li>
+                        <li><strong>El Expediente (Legal):</strong> Certificado final firmado digitalmente.</li>
+                        <li><strong>Validación Comercial:</strong> Piloto programado con 3 a 5 clientes ancla.</li>
+                    </ul>
+                </div>
+                <div class="graphic-col">
+                    <img src="imagenes/slide6.jpg" alt="Diagrama de Cómo Funciona" style="width: 100%; max-height: 450px; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Operación y Escala -->
+        <div class="slide" id="slide7">
+            <h2 class="slide-header">Operación y Escala Logística</h2>
+            <div class="content-split">
+                <div class="text-col">
+                    <ul>
+                        <li><strong>Corredores:</strong> 3 rutas principales mapeadas.</li>
+                        <li><strong>Gestión de Flota:</strong> Arrancamos con 15 kits optimizados:
+                            <br>- 5 en cliente
+                            <br>- 5 en tránsito/inversa
+                            <br>- 3 en calibración
+                            <br>- 2 de reserva
+                        </li>
+                        <li><strong>Expansión:</strong> Crecimiento a 20 kits en el Año 3.</li>
+                        <li><strong>Rampa Comercial:</strong> Cubre picos de cosecha de marzo a junio.</li>
+                    </ul>
+                </div>
+                <div class="graphic-col">
+                    <canvas id="chart-rampa"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: La Inversión -->
+        <div class="slide" id="slide8">
+            <h2 class="slide-header">Estructura de Capital</h2>
+            <div class="content-split">
+                <div class="text-col">
+                    <ul>
+                        <li><strong>Inversión Total requerida:</strong> $230,75 Millones COP.</li>
+                        <li><strong>CAPEX (Hard/Soft):</strong> $116 Millones COP.</li>
+                        <li><strong>Capital de Trabajo:</strong> $114,75 Millones COP (colchón para el arranque).</li>
+                    </ul>
+                    <div class="hero-data" style="font-size: 2.5rem;">Estructura: 60% Deuda / 40% Socios</div>
+                    <div style="text-align: center; color: #666;">Crédito apalancado de $139M @11% EA</div>
+                </div>
+                <div class="graphic-col">
+                    <canvas id="chart-inversion"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Proyección Financiera (ER) -->
+        <div class="slide" id="slide9">
+            <h2 class="slide-header">Proyección Financiera a 5 Años</h2>
+            <div class="content-split">
+                <div class="text-col">
+                    <ul>
+                        <li><strong>Ingresos (Año 1 a 5):</strong> $336M → $1.257M COP.</li>
+                        <li><strong>Rentabilidad:</strong> EBITDA positivo alcanzado en el <strong>Año 4</strong>.</li>
+                        <li><strong>Utilidad Neta:</strong> +$39M (Año 4) y +$182M (Año 5).</li>
+                        <li><strong>Punto de Equilibrio:</strong> 147 viajes/mes (con línea SaaS).</li>
+                        <li><strong>Transparencia:</strong> Proyecto intensivo en flujo; requiere espalda financiera los 3 primeros años.</li>
+                    </ul>
+                </div>
+                <div class="graphic-col">
+                    <canvas id="chart-er"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Riesgos Honestos -->
+        <div class="slide" id="slide10">
+            <h2 class="slide-header">Riesgos Críticos (De Frente)</h2>
+            <div class="content-split">
+                <div class="text-col">
+                    <ul>
+                        <li><strong>Riesgo 1: Convenios InsurTech (Año 2).</strong>
+                            <br><span style="color:#666;">Impacto: Si no se firman aseguradoras, la línea de ingresos 3 cae a $0 retrasando equilibrio.</span>
+                            <br><em>Mitigación: Foco CEO en alianzas M1-M18.</em>
+                        </li>
+                        <li><strong>Riesgo 2: Prototipo y ONAC.</strong>
+                            <br><span style="color:#666;">Impacto: Aún en fase técnica; sin ONAC no hay diferencial legal.</span>
+                            <br><em>Mitigación: $18M del CAPEX bloqueados estrictamente para certificación.</em>
+                        </li>
+                        <li><strong>Riesgo 3: Adopción Comercial B2B.</strong>
+                            <br><span style="color:#666;">Impacto: Medianas empresas lentas para contratar.</span>
+                            <br><em>Mitigación: Piloto de 5 viajes gratis con clientes ancla.</em>
+                        </li>
+                    </ul>
+                </div>
+                <div class="graphic-col">
+                    <div class="img-placeholder" style="background:#fff3cd; border-color:#ffecb5; color:#856404;">
+                        Matriz Completa en Anexo
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Roadmap -->
+        <div class="slide" id="slide11">
+            <h2 class="slide-header">Roadmap de Ejecución</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; height: 350px; margin-top: 50px;">
+                
+                <div style="text-align: center; flex: 1;">
+                    <div style="width:60px; height:60px; background:var(--primary); color:white; border-radius:50%; display:flex; justify-content:center; align-items:center; margin: 0 auto 15px; font-weight:bold; font-size:1.5rem;">0</div>
+                    <strong>Año 0</strong><br><span style="color:#666;">Inversión &<br>Certificación</span>
+                </div>
+                <div style="height:2px; background:var(--primary); flex:1;"></div>
+                
+                <div style="text-align: center; flex: 1;">
+                    <div style="width:60px; height:60px; background:var(--primary); color:white; border-radius:50%; display:flex; justify-content:center; align-items:center; margin: 0 auto 15px; font-weight:bold; font-size:1.5rem;">1</div>
+                    <strong>Año 1</strong><br><span style="color:#666;">Piloto &<br>50 Viajes/mes</span>
+                </div>
+                <div style="height:2px; background:var(--primary); flex:1;"></div>
+
+                <div style="text-align: center; flex: 1;">
+                    <div style="width:60px; height:60px; background:var(--primary); color:white; border-radius:50%; display:flex; justify-content:center; align-items:center; margin: 0 auto 15px; font-weight:bold; font-size:1.5rem;">2</div>
+                    <strong>Año 2</strong><br><span style="color:#666;">Convenios<br>InsurTech</span>
+                </div>
+                <div style="height:2px; background:var(--primary); flex:1;"></div>
+
+                <div style="text-align: center; flex: 1;">
+                    <div style="width:60px; height:60px; background:var(--primary); color:white; border-radius:50%; display:flex; justify-content:center; align-items:center; margin: 0 auto 15px; font-weight:bold; font-size:1.5rem;">3</div>
+                    <strong>Año 3</strong><br><span style="color:#666;">Expansión a<br>20 Kits</span>
+                </div>
+                <div style="height:2px; background:var(--primary); flex:1;"></div>
+
+                <div style="text-align: center; flex: 1;">
+                    <div style="width:60px; height:60px; background:var(--primary); color:white; border-radius:50%; display:flex; justify-content:center; align-items:center; margin: 0 auto 15px; font-weight:bold; font-size:1.5rem;">4</div>
+                    <strong>Año 4</strong><br><span style="color:#666; font-weight:bold; color:var(--primary)">EBITDA+</span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Slide 12: Cierre -->
+        <div class="slide cierre" id="slide12">
+            <h2>"No vendemos sensores. Vendemos certeza."</h2>
+            <div style="font-size: 1.5rem; margin-bottom: 40px;">Al exportador, al asegurador y al comprador.</div>
+            
+            <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 10px; max-width: 800px; margin: 0 auto;">
+                <h3 style="margin-top: 0; color: #fff;">Recomendación del Comité:</h3>
+                <p>Avanzar a fase de piloto <strong>estrictamente condicionado</strong> a validar:<br>
+                1. Disposición de pago real (clientes ancla).<br>
+                2. Convenios aseguradores.<br>
+                3. Certificación ONAC.</p>
+            </div>
+            
+            <div style="margin-top: 40px; font-size: 1.2rem;">
+                Andrés Bedoya | Tomas Henao | Luis Carlos Guerra<br>
+                Quedamos atentos a sus preguntas.
+            </div>
+        </div>
+
+        <!-- UI Controles de Navegación -->
+        <div class="slide-counter"><span id="currentSlideNum">1</span> / 12</div>
+        <div class="nav-controls">
+            <button class="nav-btn" onclick="prevSlide()">❮</button>
+            <button class="nav-btn" onclick="nextSlide()">❯</button>
+        </div>
+    </div>
+
+    <!-- Script de lógica e inicialización de Chart.js -->
+    <script>
+        // Ajustar escala de la presentación
+        function resizePresentation() {
+            const container = document.getElementById('presentation-container');
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            const scaleX = windowWidth / 1280;
+            const scaleY = windowHeight / 720;
+            const scale = Math.min(scaleX, scaleY) * 0.98; // 98% para un ligero margen
+            container.style.transform = `scale(${scale})`;
+        }
+        window.addEventListener('resize', resizePresentation);
+        resizePresentation();
+
+        // Navegación de slides
+        let currentSlide = 1;
+        const totalSlides = 12;
+
+        function showSlide(n) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById('slide' + n).classList.add('active');
+            document.getElementById('currentSlideNum').innerText = n;
+        }
+
+        function nextSlide() {
+            if(currentSlide < totalSlides) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            if(currentSlide > 1) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        // Soporte para flechas del teclado
+        document.addEventListener('keydown', function(event) {
+            if(event.key === "ArrowRight" || event.key === " ") {
+                nextSlide();
+            } else if(event.key === "ArrowLeft") {
+                prevSlide();
+            }
+        });
+
+        // Configuración común de Chart.js
+        Chart.defaults.font.family = 'Roboto';
+        Chart.defaults.color = '#333';
+        const brandGreen = '#0E7C5A';
+        const secondaryGray = '#a5a5a5';
+        const alertRed = '#d9534f';
+
+        // Gráfico Mercado (Slide 3)
+        new Chart(document.getElementById('chart-mercado'), {
+            type: 'bar',
+            data: {
+                labels: ['TAM (Total)', 'SAM (Rechazos)', 'SOM (Nosotros)'],
+                datasets: [{
+                    label: 'Contenedores / Año',
+                    data: [3460, 2080, 600],
+                    backgroundColor: [secondaryGray, '#8cb3a6', brandGreen]
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+
+        // Gráfico Rampa (Slide 7)
+        new Chart(document.getElementById('chart-rampa'), {
+            type: 'line',
+            data: {
+                labels: ['Año 1', 'Año 2', 'Año 3', 'Año 4', 'Año 5'],
+                datasets: [{
+                    label: 'Viajes/Año',
+                    data: [600, 690, 794, 913, 1050],
+                    borderColor: brandGreen,
+                    backgroundColor: 'rgba(14, 124, 90, 0.2)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.3
+                },
+                {
+                    label: 'Punto Equilibrio (SaaS)',
+                    data: [1764, 1764, 1764, 1764, 1764], // 147 * 12 meses
+                    borderColor: alertRed,
+                    borderDash: [5, 5],
+                    borderWidth: 2,
+                    fill: false,
+                    pointRadius: 0
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Gráfico Inversión (Slide 8)
+        new Chart(document.getElementById('chart-inversion'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Deuda Bancaria (60%)', 'Aporte Socios (40%)'],
+                datasets: [{
+                    data: [139, 91.75],
+                    backgroundColor: [brandGreen, '#c2dcd2'],
+                    borderWidth: 0
+                }]
+            },
+            options: { responsive: true, cutout: '70%' }
+        });
+
+        // Gráfico Estado de Resultados (Slide 9) - Datos reales del Excel
+        new Chart(document.getElementById('chart-er'), {
+            type: 'bar',
+            data: {
+                labels: ['Año 1', 'Año 2', 'Año 3', 'Año 4', 'Año 5'],
+                datasets: [
+                    {
+                        label: 'Ingresos Totales (M COP)',
+                        data: [336, 544, 745, 981, 1256],
+                        backgroundColor: '#8cb3a6',
+                        order: 2
+                    },
+                    {
+                        type: 'line',
+                        label: 'EBITDA (M COP)',
+                        data: [-390, -229, -97, 82, 299],
+                        borderColor: brandGreen,
+                        borderWidth: 3,
+                        pointBackgroundColor: brandGreen,
+                        pointRadius: 5,
+                        order: 1
+                    }
+                ]
+            },
+            options: { 
+                responsive: true,
+                scales: {
+                    y: { grid: { color: '#e0e0e0' } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
